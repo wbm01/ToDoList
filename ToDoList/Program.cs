@@ -1,4 +1,6 @@
-﻿internal class Program
+﻿using ToDoList;
+
+internal class Program
 {
     static int Menu()
         {
@@ -29,6 +31,10 @@
         }
     private static void Main(string[] args)
     {
+        Person p = new Person();
+        ToDo todo = new ToDo();
+        Console.WriteLine(todo.ToString());
         
+
     }
 }

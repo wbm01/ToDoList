@@ -8,27 +8,61 @@ using Microsoft.VisualBasic;
 
 namespace ToDoList
 {
-    internal class Todo
+    internal class ToDo
     {
         private string id;
 
         public string Description { get; set; }
+        public string category { get; set; }
         public DateTime Created { get; set; }
         public DateTime DueDate { get; set; }
         public bool Status { get; set; }
 
-        public Todo(string description)
+        public ToDo()
         {
             var temp = Guid.NewGuid();
             id = temp.ToString();
 
+            Console.Write(" Descrição da tarefa: ");
+            string description;
+            description = Console.ReadLine();
             this.Description = description;
 
-            var date = new DateTime();
-            date = DateTime.Now.ToUniversalTime();
-            Console.WriteLine(date);
+            Category category = new();
+            this.category = category.SetCategory();
 
-            Console.WriteLine("");
+            DateTime date = DateTime.Now;
+            string formattedDate = date.ToString("dd/MM/yyyy HH:mm:ss");
+            Console.WriteLine(" Essa tarefa foi criada em: " + formattedDate);
+            this.Created = date;
+
+            Console.WriteLine("Dia previsto de conclusão: ");
+            int dia = int.Parse(Console.ReadLine());
+            Console.WriteLine("Mês previsto de conclusão: ");
+            int mes = int.Parse(Console.ReadLine());
+            Console.WriteLine("Ano previsto de conclusão: ");
+            int ano = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Hora prevista de conclusão: ");
+            int hora = int.Parse(Console.ReadLine());
+            Console.WriteLine("Minuto previsto de conclusão: ");
+            int min = int.Parse(Console.ReadLine());
+            int seg = 0;
+
+            DateTime dueDate = new DateTime(ano, mes, dia, hora, min, seg);
+            this.DueDate = dueDate;
+            Console.WriteLine(dueDate);
+
+            Console.WriteLine("Essa tarefa está concluída? N- não  | S - sim");
+            char answer = char.Parse(Console.ReadLine().ToUpper());
+            bool status = this.Status;
+            
+            if(answer == 'N')
+            {
+                status = false;
+            }
+            else
+                status = true;
 
             //incrementar outras variáveis
 
@@ -37,23 +71,23 @@ namespace ToDoList
 
         public override string ToString()
         {
-            return "Id: " + id + "Description: " + Description + "Category: "+ "Date Created: " + Created + "DateTime: " + DateTime.ToString()
-                + "Status: " + Status;
+            return "\nId: " + id + "\nDescription: " + Description + "\nCategory: " + category + "\nData de criação: " + Created + "\nPrevisão de conclusão: " + DueDate
+                + "\nStatus: " + Status;
         }
 
         string ToFile()
         { //ver sobre o retorno da categoria
-            return id + ";" + Description + ";" + Created + ";" + DateTime.ToString() + Status;
+            return id + ";" + Description + ";" + Created + ";" + ";" + Created + ";" + Status;
         }
 
-        bool SetStatus()
-        {
+        //bool SetStatus()
+        //{
 
-        }
+        //}
 
-        Person SetPerson()
-        {
+        //Person SetPerson()
+        //{
 
-        }
+        //}
     }
 }

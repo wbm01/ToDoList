@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace ToDoList
 {
-    internal class Work
+    internal class Work : Category
     {
+        string work;
+        public Work()
+        {
+            this.work = "Trabalho";
+        }
+
+        public override string ToString()
+        {
+            return this.work;
+        }
     }
 }
