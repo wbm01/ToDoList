@@ -17,27 +17,6 @@ namespace ToDoList
 
         }
 
-        public string SetCategory()
-        {
-            Console.WriteLine("1-Importante\n2-Pessoal\n3-Profissional");
-            Console.Write("Essa tarefa é: ");
-            int c = int.Parse(Console.ReadLine());
-
-            if (c == 1)
-            {
-                return Importante;
-            }
-            else
-            {
-                if (c == 2)
-                {
-                    return "Pessoal";
-                }
-                else
-                {
-                    return "Profissional";
-                }
-            }
-        }
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using ToDoList;
+﻿using System.ComponentModel;
+using ToDoList;
 
 internal class Program
 {
@@ -31,10 +32,92 @@ internal class Program
         }
     private static void Main(string[] args)
     {
-        Person p = new Person();
-        ToDo todo = new ToDo();
-        Console.WriteLine(todo.ToString());
-        
 
+    
+
+        List<ToDo> listatarefa = new List<ToDo>();
+
+       
+
+        ToDo CriarTarefa()
+        {
+            Console.Write(" Descrição da tarefa: ");
+            string description = Console.ReadLine();
+
+            Console.WriteLine("Essa tarefa está concluída? N- não  | S - sim");
+            char answer = char.Parse(Console.ReadLine().ToUpper());
+            bool status;
+
+            if (answer == 'N')
+            {
+                status = false;
+            }
+            else
+            {
+                status = true;
+            }
+
+            string categoria = SetCategory();
+
+
+            ToDo todo = new ToDo(description, status, categoria);
+
+            Console.WriteLine("Informe o nome do usuário: ");
+            todo.Owner.SetName(Console.ReadLine());
+
+            DateTime date = DateTime.Now;
+            string formattedDate = date.ToString("dd/MM/yyyy HH:mm:ss");
+            Console.WriteLine(" Essa tarefa foi criada em: " + formattedDate);
+            todo.Created = date;
+
+            Console.WriteLine("Dia previsto de conclusão: ");
+            int dia = int.Parse(Console.ReadLine());
+            Console.WriteLine("Mês previsto de conclusão: ");
+            int mes = int.Parse(Console.ReadLine());
+            Console.WriteLine("Ano previsto de conclusão: ");
+            int ano = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Hora prevista de conclusão: ");
+            int hora = int.Parse(Console.ReadLine());
+            Console.WriteLine("Minuto previsto de conclusão: ");
+            int min = int.Parse(Console.ReadLine());
+            int seg = 0;
+
+            DateTime dueDate = new DateTime(ano, mes, dia, hora, min, seg);
+            todo.DueDate = dueDate;
+
+            return todo;
+        }
+
+        listatarefa.Add(CriarTarefa());
+
+        foreach(var item in listatarefa)
+        {
+            Console.WriteLine(item.ToString());
+        }
+
+        string SetCategory()
+        {
+            Console.WriteLine("1-Importante\n2-Pessoal\n3-Profissional");
+            Console.Write("Essa tarefa é: ");
+            int c = int.Parse(Console.ReadLine());
+
+            if (c == 1)
+            {
+                return "Importante";
+            }
+            else
+            {
+                if (c == 2)
+                {
+                    return "Pessoal";
+                }
+                else
+                {
+                    return "Profissional";
+                }
+            }
+        }
     }
+
 }

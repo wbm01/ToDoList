@@ -12,18 +12,23 @@ namespace ToDoList
         public string Name { get; set; }
 
 
-       public Person()
+       public Person(string name)
         {
             var temp = Guid.NewGuid();
             IdPerson = temp.ToString();
-            SetName();
+            this.Name = name;
         }
 
-        string SetName()
+        public Person(string id, string name)
         {
-            Console.WriteLine("Informe seu nome: ");
-            string name = Console.ReadLine();
-            return name;
+            this.IdPerson = id;
+            this.Name = name;
+        }
+
+        public void SetName(string name)
+        {
+            
+            this.Name = name;
         }
 
         public override string ToString()

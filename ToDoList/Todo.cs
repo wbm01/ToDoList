@@ -13,22 +13,41 @@ namespace ToDoList
         private string id;
 
         public string Description { get; set; }
-        public string category { get; set; }
+        public string Category { get; set; }
+
+        public Person Owner { get; set; }
+
+        public bool Status { get; set; }
         public DateTime Created { get; set; }
         public DateTime DueDate { get; set; }
-        public bool Status { get; set; }
 
-        public ToDo()
+        public ToDo(string description, bool status, string categoria)
         {
             var temp = Guid.NewGuid();
             id = temp.ToString();
 
-            Console.Write(" Descrição da tarefa: ");
+            Description = description;
+            Status = status;
+            Category = categoria;
+        }
+
+        public ToDo(string id, string description, bool status, string categoria)
+        {
+            this.id = id;
+            this.Description = description;
+            this.Status = status;
+            this.Owner = new Person();
+            this.Created = new DateTime();
+            this.DueDate = new DateTime();
+            this.Category = categoria;
+        }
+
+            /*Console.Write(" Descrição da tarefa: ");
             string description;
             description = Console.ReadLine();
-            this.Description = description;
+            this.Description = description;*/
 
-            Category category = new();
+            /*Category category = new();
             this.category = category.SetCategory();
 
             DateTime date = DateTime.Now;
@@ -62,16 +81,13 @@ namespace ToDoList
                 status = false;
             }
             else
-                status = true;
+                status = true;*/
 
             //incrementar outras variáveis
 
-
-        }
-
         public override string ToString()
         {
-            return "\nId: " + id + "\nDescription: " + Description + "\nCategory: " + category + "\nData de criação: " + Created + "\nPrevisão de conclusão: " + DueDate
+            return "\nId: " + id + "\nDescription: " + Description + "\nCategory: " + Category + "\nData de criação: " + Created + "\nPrevisão de conclusão: " + DueDate
                 + "\nStatus: " + Status;
         }
 
