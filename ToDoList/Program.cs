@@ -56,7 +56,7 @@ internal class Program
         }
         else
         {
-            Console.Write("1- Entrar com usuário existente\n2-Criar novo usuário \nDeseja utilizar usuário exitente ou criar um novo?");
+            Console.Write("1- Entrar com usuário existente\n2-Criar novo usuário \n\nSelecione a opção desejada: ");
             int user = int.Parse(Console.ReadLine());
 
             if (user == 1)
@@ -65,6 +65,7 @@ internal class Program
                 {
                     Console.WriteLine(pessoa.ToString());
                 }
+                Console.Write("\nDigite o nome do usuário: ");
 
                 name = Console.ReadLine();
 
@@ -84,13 +85,7 @@ internal class Program
                 CriarArquivoTarefa(listatarefa, arquivopessoa);
             }
 
-            //foreach (var pessoa in listaperson)
-            //{
-            //    if (name == pessoa.Name)
-            //    {
-
-            //    }
-            //}
+        
 
         }
         int Menu()
@@ -99,13 +94,10 @@ internal class Program
 
             Console.Clear();
             Console.WriteLine(">>>> Menu Principal <<<<");
-            Console.WriteLine("1- Adicionar tarefa ");
-            Console.WriteLine("2- Adicionar pessoa");
-            Console.WriteLine("3- Total das Tarefas Importantes");
-            Console.WriteLine("4- Total das Tarefas Pessoais");
-            Console.WriteLine("5- Total das Tarefas Profissionais");
-
-            Console.WriteLine("6- Gravar programa e sair da execução");
+            Console.WriteLine("1- Adicionar tarefa");
+            Console.WriteLine("2 - Todas as tarefas");
+            Console.WriteLine("3 - Tarefas a concluir");
+            Console.WriteLine("4- Gravar programa e sair da execução");
 
             try
             {
@@ -131,32 +123,43 @@ internal class Program
                     break;
 
                 case 2:
-                    CriarPerson();
+                    foreach(var tarefa in listatarefa)
+                    {
+                        Console.WriteLine(tarefa.ToString());
+                    }
+                    Console.WriteLine("Pressione qualquer tecla para retornar ao menu.");
+                    Console.ReadKey();
                     break;
 
                 case 3:
+                    foreach (var tarefa in listatarefa)
+                    {
+                        if(tarefa.Status == false)
+                        {
+                            Console.WriteLine(tarefa.ToString());
+                            Console.WriteLine("Deseja finalizar essa tarefa? S - Sim | N - Não ");
+                            char check = char.Parse(Console.ReadLine().ToUpper());
 
+                            if(check == 'S')
+                            {
+                                tarefa.Status = true;
+                            }
+                        }
+                    }
                     break;
 
                 case 4:
-
-                    break;
-
-                case 5:
-
-                    break;
-
-                case 6:
-                    CriarArquivoTarefa(listatarefa,arquivotarefa);
+                    CriarArquivoTarefa(listatarefa, arquivotarefa);
                     Console.WriteLine("Até mais :)");
                     Thread.Sleep(1500);
                     break;
 
+               
                 default:
                     Console.WriteLine("Digite um item válido do menu.");
                     break;
             }
-        } while (op != 6);
+        } while (op != 4);
 
 
 
@@ -335,20 +338,34 @@ internal class Program
                 StreamReader sr = new StreamReader(p);
 
                 string textToDo = "";
-                List<ToDo> listatarefa = new List<ToDo>();
+                
 
                 while ((textToDo = sr.ReadLine()) != null)
                 {
 
-                    string[] aux4 = sr.ReadLine().Split(";");
+                    var aux4 = textToDo.Split(";");
 
                     Person person = new Person(p);
+                   
+                    string id = aux4[0];
+                    string description = aux4[1];
+                    string category = aux4[2];
 
-                    string description = aux4[0];
-                    string category = aux4[1];
-                    person.Name = aux4[2].Split(";")[1];
+                    ToDo td = new ToDo(description,category,person);
 
-                    listatarefa.Add(new(description, category, person));
+                    var aux = td.Created.ToString();
+                    aux = aux4[3];
+
+                    var aux2 = td.DueDate.ToString();
+                    aux2 = aux4[4];
+
+                    td.Owner.Name = aux4[5];
+
+
+
+                    //person.Name = aux4[3].Split(";")[1];
+
+                    listatarefa.Add(td);
 
                 }
                 sr.Close();
@@ -374,22 +391,24 @@ internal class Program
                 StreamReader sr = new StreamReader(p);
 
                 string textToDo = "";
-                List<ToDo> listatarefa = new List<ToDo>();
+
 
                 while ((textToDo = sr.ReadLine()) != null)
                 {
-                    //var aux3 = textToDo.Split(";");
 
-                    string[] aux5 = sr.ReadToEnd().Split(";");
+                    var aux4 = textToDo.Split(";");
 
-                    string idperson = aux5[0];
-                    string name = aux5[1];
+                    
 
-                    listaperson.Add(new(idperson, name));
+                    string id = aux4[0];
+                    string name = aux4[1];
+                    
+
+                    listaperson.Add(new(id,name));
 
                 }
                 sr.Close();
-
+                return listaperson;
             }
             else
             {
