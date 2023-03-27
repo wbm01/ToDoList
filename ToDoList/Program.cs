@@ -6,20 +6,106 @@ using static System.Reflection.Metadata.BlobBuilder;
 
 internal class Program
 {
-    static int Menu()
+    //static int Menu()
+    //{
+    //    int menu;
+
+    //    Console.Clear();
+    //    Console.WriteLine(">>>> Menu Principal <<<<");
+    //    Console.WriteLine("1- Adicionar tarefa ");
+    //    Console.WriteLine("2- Adicionar pessoa");
+    //    Console.WriteLine("3- Total das Tarefas Importantes");
+    //    Console.WriteLine("4- Total das Tarefas Pessoais");
+    //    Console.WriteLine("5- Total das Tarefas Profissionais");
+
+    //    Console.WriteLine("?- Sair da execução");
+
+    //    try
+    //    {
+    //        menu = int.Parse(Console.ReadLine());
+    //    }
+
+    //    catch
+    //    {
+    //        return '\n';
+    //    }
+
+    //    return menu;
+    //}
+    private static void Main(string[] args)
+    {
+
+        string arquivotarefa = "tarefa.txt";
+        string arquivopessoa = "pessoa.txt";
+
+        List<ToDo> listatarefa = new List<ToDo>();
+        List<Person> listaperson = new List<Person>();
+
+        listatarefa = CarregarListaTarefa(arquivotarefa);
+        listaperson = CarregarListaPessoa(arquivopessoa);
+
+
+        string name = "";
+        Person pessoaAtual = new(name);
+
+        if (listaperson.Count == 0)
+        {
+            pessoaAtual = CriarPerson();
+            listaperson.Add(pessoaAtual);
+            CriarArquivoPessoa(listaperson, arquivopessoa);
+        }
+        else
+        {
+            Console.Write("1- Entrar com usuário existente\n2-Criar novo usuário \nDeseja utilizar usuário exitente ou criar um novo?");
+            int user = int.Parse(Console.ReadLine());
+
+            if (user == 1)
+            {
+                foreach (var pessoa in listaperson)
+                {
+                    Console.WriteLine(pessoa.ToString());
+                }
+
+                name = Console.ReadLine();
+
+                foreach (var pessoa in listaperson)
+                {
+                    if (pessoa.Name.Equals(name))
+                    {
+                        pessoaAtual = pessoa;
+                    }
+                }
+
+            }
+            else
+            {
+                pessoaAtual = CriarPerson();
+                listaperson.Add(pessoaAtual);
+                CriarArquivoTarefa(listatarefa, arquivopessoa);
+            }
+
+            //foreach (var pessoa in listaperson)
+            //{
+            //    if (name == pessoa.Name)
+            //    {
+
+            //    }
+            //}
+
+        }
+        int Menu()
         {
             int menu;
 
             Console.Clear();
             Console.WriteLine(">>>> Menu Principal <<<<");
             Console.WriteLine("1- Adicionar tarefa ");
-            Console.WriteLine("2- tot Tarefas Importantes");
-            Console.WriteLine("3- tot Tarefas de Trabalho");
-            Console.WriteLine("4- tot Tarefas de Estudo");
-            Console.WriteLine("5- tot Tarefas concluídas");
-            Console.WriteLine("6- tot Tarefas a concluir");
+            Console.WriteLine("2- Adicionar pessoa");
+            Console.WriteLine("3- Total das Tarefas Importantes");
+            Console.WriteLine("4- Total das Tarefas Pessoais");
+            Console.WriteLine("5- Total das Tarefas Profissionais");
 
-            Console.WriteLine("?- Sair da execução");
+            Console.WriteLine("6- Gravar programa e sair da execução");
 
             try
             {
@@ -33,17 +119,47 @@ internal class Program
 
             return menu;
         }
-    private static void Main(string[] args)
-    {
+        int op;
+        do
+        {
+            op = Menu();
 
-        string arquivotarefa = "tarefa.txt";
-        string arquivopessoa = "pessoa.txt";
+            switch (op)
+            {
+                case 1:
+                    listatarefa.Add(CriarTarefa(pessoaAtual));
+                    break;
 
-        List<ToDo> listatarefa = new List<ToDo>();
-        List<Person> listaperson = new List<Person>();
+                case 2:
+                    CriarPerson();
+                    break;
 
-        listatarefa = CarregarListaTarefa(arquivotarefa);
-        listaperson = CarregarListaPessoa(arquivopessoa);
+                case 3:
+
+                    break;
+
+                case 4:
+
+                    break;
+
+                case 5:
+
+                    break;
+
+                case 6:
+                    CriarArquivoTarefa(listatarefa,arquivotarefa);
+                    Console.WriteLine("Até mais :)");
+                    Thread.Sleep(1500);
+                    break;
+
+                default:
+                    Console.WriteLine("Digite um item válido do menu.");
+                    break;
+            }
+        } while (op != 6);
+
+
+
 
         Person CriarPerson()
         {
@@ -62,25 +178,9 @@ internal class Program
             Console.Write(" Descrição da tarefa: ");
             string description = Console.ReadLine();
 
-            /*Console.WriteLine("Essa tarefa está concluída? N- não  | S - sim");
-            char answer = char.Parse(Console.ReadLine().ToUpper());
-            bool status;
-
-            if (answer == 'N')
-            {
-                status = false;
-            }
-            else
-            {
-                status = true;
-            }*/
-
             string categoria = SetCategory();
 
-
             ToDo todo = new ToDo(description, categoria, person);
-
-            
 
             DateTime date = DateTime.Now;
             string formattedDate = date.ToString("dd/MM/yyyy HH:mm:ss");
@@ -103,23 +203,13 @@ internal class Program
             DateTime dueDate = new DateTime(ano, mes, dia, hora, min, seg);
             todo.DueDate = dueDate;
 
+
+
             return todo;
         }
 
-        Person p = CriarPerson();
-        listaperson.Add(p);
-        listatarefa.Add(CriarTarefa(p));
 
-        
-       /* foreach(var item in listaperson)
-        {
-            Console.WriteLine(item.ToString());
-        }*/
 
-        foreach(var item in listatarefa)
-        {
-            Console.WriteLine(item.ToString());
-        }
 
         string SetCategory()
         {
@@ -144,7 +234,7 @@ internal class Program
             }
         }
 
-        void CriarArquivo(string s)
+        void CriarArquivoTarefa(List<ToDo>l,string s)
         {
             try
             {
@@ -152,20 +242,20 @@ internal class Program
                 {
                     var temp = LerArquivo(s);
                     StreamWriter sw = new StreamWriter(s);
-                    for (int i = 0; i < listatarefa.Count; i++)
+                    for (int i = 0; i < l.Count; i++)
                     {
-                        sw.WriteLine(listatarefa[i].ToFile());
+                        sw.WriteLine(l[i].ToFile());
                     }
-                    
+
 
                     sw.Close();
                 }
                 else
                 {
                     StreamWriter sw = new(s);
-                    for (int i = 0; i < listatarefa.Count; i++)
+                    for (int i = 0; i < l.Count; i++)
                     {
-                        sw.WriteLine(listatarefa[i].ToFile());
+                        sw.WriteLine(l[i].ToFile());
                     }
                     sw.Close();
                 }
@@ -182,6 +272,43 @@ internal class Program
             }
         }
 
+        void CriarArquivoPessoa(List<Person> l, string s)
+        {
+            try
+            {
+                if (File.Exists(s))
+                {
+                    var temp = LerArquivo(s);
+                    StreamWriter sw = new StreamWriter(s);
+                    for (int i = 0; i < l.Count; i++)
+                    {
+                        sw.WriteLine(l[i].ToString());
+                    }
+
+
+                    sw.Close();
+                }
+                else
+                {
+                    StreamWriter sw = new(s);
+                    for (int i = 0; i < l.Count; i++)
+                    {
+                        sw.WriteLine(l[i].ToString());
+                    }
+                    sw.Close();
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("ERRO: Não foi possível incluir as tarefas!");
+            }
+            finally
+            {
+
+                Thread.Sleep(1000);
+                Console.WriteLine();
+            }
+        }
         string LerArquivo(string f)
         {
 
@@ -207,34 +334,19 @@ internal class Program
 
                 StreamReader sr = new StreamReader(p);
 
-                string textContact = "";
+                string textToDo = "";
                 List<ToDo> listatarefa = new List<ToDo>();
 
-                while ((textContact = sr.ReadLine()) != null)
+                while ((textToDo = sr.ReadLine()) != null)
                 {
-                    //var aux3 = textContact.Split(";");
 
-                    /*ToDo todo = new ToDo();
-                   
-
-                    todo.id = aux3[0];
-                    todo.Description = aux3[1];
-                    todo.Category = aux3[2];
-                    todo.Created = aux3[4];
-                    todo.DueDate = aux3[5];*/
-
-                    string[]aux4 = sr.ReadLine().Split(";");
+                    string[] aux4 = sr.ReadLine().Split(";");
 
                     Person person = new Person(p);
 
-                    //string id = aux4[0];
                     string description = aux4[0];
                     string category = aux4[1];
-                    //string created = aux4[3];
-                    //string duedate = aux4[4];
                     person.Name = aux4[2].Split(";")[1];
-
-                    //listatarefa.Add(new(id, description, category, created, duedate));
 
                     listatarefa.Add(new(description, category, person));
 
@@ -261,12 +373,12 @@ internal class Program
 
                 StreamReader sr = new StreamReader(p);
 
-                string textContact = "";
+                string textToDo = "";
                 List<ToDo> listatarefa = new List<ToDo>();
 
-                while ((textContact = sr.ReadLine()) != null)
+                while ((textToDo = sr.ReadLine()) != null)
                 {
-                    //var aux3 = textContact.Split(";");
+                    //var aux3 = textToDo.Split(";");
 
                     string[] aux5 = sr.ReadToEnd().Split(";");
 
@@ -277,7 +389,7 @@ internal class Program
 
                 }
                 sr.Close();
-                
+
             }
             else
             {
