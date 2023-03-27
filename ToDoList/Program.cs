@@ -451,7 +451,7 @@ internal class Program
         {
             try
             {
-                Console.Write("Digite FIELMENTE uma parte da descrição da tarefa a ser removida: ");
+                Console.Write("\nDigite FIELMENTE uma parte da descrição da tarefa a ser removida: ");
                 var n = Console.ReadLine();
                 foreach (var tarefa in taskList)
                 {
