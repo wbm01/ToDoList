@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Net;
+using System.Reflection.Metadata;
 using Microsoft.VisualBasic;
 using ToDoList;
 using static System.Reflection.Metadata.BlobBuilder;
@@ -8,6 +10,8 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+        int user;
+        bool escolha=false;
 
         string taskFile = "tarefa.txt";
         string personFile = "person.txt";
@@ -30,38 +34,57 @@ internal class Program
         }
         else
         {
-            Console.WriteLine("Bem-vindo(a)!");
-            Console.Write("\n(1)- Entrar com usuário existente;\n(2)- Criar novo usuário; \n\nSelecione a opção desejada: ");
-            int user = int.Parse(Console.ReadLine());
-
-            if (user == 1)
+            while (escolha = true)
             {
-                foreach (var person in personList)
+                try
                 {
-                    Console.WriteLine(person.ToString());
-                }
-                Console.Write("\nDigite o nome do usuário: ");
+                    Console.WriteLine("Bem-vindo(a)!");
+                    Console.Write("\n(1)- Entrar com usuário existente;\n(2)- Criar novo usuário; \n\nSelecione a opção desejada: ");
+                    user = int.Parse(Console.ReadLine());
 
-                name = Console.ReadLine();
-
-                foreach (var pessoa in personList)
-                {
-                    if (pessoa.Name.Equals(name))
+                    if (user == 1)
                     {
-                        currentPerson = pessoa;
+                        foreach (var person in personList)
+                        {
+                            Console.WriteLine(person.ToString());
+                        }
+                        Console.Write("\nDigite o nome do usuário: ");
+
+                        name = Console.ReadLine();
+
+                        foreach (var pessoa in personList)
+                        {
+                            if (pessoa.Name.Equals(name))
+                            {
+                                currentPerson = pessoa;
+                            }
+                        }
+                        escolha = false;
+                    }
+                    else if (user == 2)
+                    {
+                        currentPerson = CreatePerson();
+                        personList.Add(currentPerson);
+                        CreateTaskFile(taskList, personFile);
+                        escolha = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nDigite apenas o número da opção desejada!");
+                        Thread.Sleep(1500);
+                        Console.Clear();
+                        escolha = true;
                     }
                 }
-
+                catch
+                {
+                    Console.WriteLine("\nDigite apenas o número da opção desejada!");
+                    Thread.Sleep(1500);
+                    Console.Clear();
+                    escolha = true;
+                }
             }
-            else
-            {
-                currentPerson = CreatePerson();
-                personList.Add(currentPerson);
-                CreateTaskFile(taskList, personFile);
-            }
-
-
-
+           
         }
 
         int op;
@@ -78,12 +101,22 @@ internal class Program
 
                 case 2: //todas as tarefas
                     Console.Clear();
-                    foreach (var tarefa in taskList)
+
+                    if(taskList.Count == 0)
                     {
-                        Console.WriteLine(tarefa.ToString());
+                        Console.WriteLine("\nLista de tarefas vazia!");
                     }
-                    Console.WriteLine("Pressione qualquer tecla para retornar ao menu.");
+                    else
+                    {
+                        foreach (var tarefa in taskList)
+                        {
+                            Console.WriteLine(tarefa.ToString());
+
+                        }
+                    }
+                    Console.WriteLine("\nPressione qualquer tecla para retornar ao menu.");
                     Console.ReadKey();
+
                     break;
 
                 case 3:// tarefas a concluir
@@ -93,7 +126,7 @@ internal class Program
                         if (tarefa.Status == false)
                         {
                             Console.WriteLine(tarefa.ToString());
-                            Console.WriteLine("Deseja finalizar essa tarefa? S - Sim | N - Não ");
+                            Console.WriteLine("\nDeseja finalizar essa tarefa? S - Sim | N - Não ");
                             char check = char.Parse(Console.ReadLine().ToUpper());
 
                             if (check == 'S')
@@ -111,13 +144,19 @@ internal class Program
                         if (tarefa.Status == true)
                         {
                             Console.WriteLine(tarefa.ToString());
-                            Console.WriteLine("Refazer essa tarefa? S - Sim | N - Não ");
+                            Console.WriteLine("\nRefazer essa tarefa? S - Sim | N - Não ");
                             char check = char.Parse(Console.ReadLine().ToUpper());
 
                             if (check == 'S')
                             {
                                 tarefa.Status = false;
                             }
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nNão há tarefas disponíveis!");
+                            Console.WriteLine("\nPressione qualquer tecla para retornar ao menu.");
+                            Console.ReadKey();
                         }
                     }
                     break;
@@ -129,17 +168,88 @@ internal class Program
                         Console.WriteLine(tarefa);
                     }
                     taskList.Remove(DeleteTask());
-                    Console.WriteLine("Pressione qualquer tecla para retornar ao menu.");
+                    Console.WriteLine("\nPressione qualquer tecla para retornar ao menu.");
                     Console.ReadKey();
                     break;
-                
-                case 6: // editar tarefa
 
+                case 6: //remover pessoa
+                    Console.Clear();
+                    foreach (var pessoa in personList)
+                    {
+                        Console.WriteLine(pessoa);
+                    }
+                    personList.Remove(DeletePerson());
+                    Console.WriteLine("\nPressione qualquer tecla para retornar ao menu.");
+                    Console.ReadKey();
                     break;
 
-                case 7: // sair
+                case 7: // editar tarefa
+                    foreach (var tarefa in taskList)
+                    {
+                        Console.WriteLine(tarefa);
+                    }
+                    Console.Write("\nDigite FIELMENTE uma parte da descrição da tarefa a alterada: ");
+                    string aux = Console.ReadLine();
+
+                    Console.WriteLine("\n1- Alterar a descrição da tarefa \n2- Alterar a data prevista de conclusão" +
+                        "\n3- Alterar a categoria da tarefa");
+                    Console.Write("\nDigite o número da opção que deseja alterar: ");
+                    int aux2 = int.Parse(Console.ReadLine());
+
+                    switch(aux2)
+                        {
+                        case 1:
+                            foreach(var task in taskList)
+                            {
+                                if (task.Description.Contains(aux))
+                                {
+                                    Console.Write("\nInforme a nova descrição: ");
+                                    string aux3 = Console.ReadLine();
+
+                                    string retornodescricao = task.EditDescription(aux3);
+                                }
+                            }
+                            break;
+
+                            case 2:
+                            foreach (var task in taskList)
+                            {
+                                if (task.Description.Contains(aux))
+                                {
+                                    Console.Write("\nDia previsto de conclusão: ");
+                                    int dia = int.Parse(Console.ReadLine());
+                                    Console.Write("\nMês previsto de conclusão: ");
+                                    int mes = int.Parse(Console.ReadLine());
+                                    Console.Write("\nAno previsto de conclusão: ");
+                                    int ano = int.Parse(Console.ReadLine());
+
+                                    Console.Write("\nHora prevista de conclusão: ");
+                                    int hora = int.Parse(Console.ReadLine());
+                                    Console.Write("\nMinuto previsto de conclusão: ");
+                                    int min = int.Parse(Console.ReadLine());
+                                    int seg = 0;
+
+                                    DateTime dueDate = new DateTime(ano, mes, dia, hora, min, seg);
+                                    var retornodataprevista = task.EditDueDate(dueDate);
+                                }
+                            }
+                            break;
+
+                            case 3:
+                            foreach (var task in taskList)
+                            {
+                                if (task.Description.Contains(aux))
+                                {
+                                    var retornocategoria = task.EditCategory(SetCategory());
+                                }
+                            }
+                            break;
+                    }
+                    break;
+
+                case 8: // sair
                     CreateTaskFile(taskList, taskFile);
-                    Console.WriteLine("Até mais :)");
+                    Console.WriteLine("Até mais! :)");
                     Thread.Sleep(1500);
                     break;
 
@@ -147,7 +257,7 @@ internal class Program
                     Console.WriteLine("\nDigite um item válido do menu.");
                     break;
             }
-        } while (op != 7);
+        } while (op != 8);
 
 
         // métodos:
@@ -163,8 +273,9 @@ internal class Program
             Console.WriteLine("3- Tarefas a concluir");
             Console.WriteLine("4- Tarefas concluídas");
             Console.WriteLine("5- Remover tarefa");
-            Console.WriteLine("6- Editar tarefa");
-            Console.WriteLine("7- Gravar e Sair da execução...");
+            Console.WriteLine("6- Remover pessoa");
+            Console.WriteLine("7- Editar tarefa");
+            Console.WriteLine("8- Gravar e Sair da execução...");
 
             try
             {
@@ -469,6 +580,33 @@ internal class Program
             finally
             {
                 Console.WriteLine("\nTarefa deletada com sucesso! :)");
+                Thread.Sleep(1500);
+            }
+            return null;
+        }
+
+        Person DeletePerson()
+        {
+            try
+            {
+                Console.Write("\nDigite o nome do usuário a ser removido: ");
+                var n = Console.ReadLine();
+                foreach (var pessoa in personList)
+                {
+                    if (pessoa.Name.Contains(n))
+                    {
+                        return pessoa;
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine("\nUsuário não encontrada.");
+
+            }
+            finally
+            {
+                Console.WriteLine("\nUsuário deletado com sucesso! :)");
                 Thread.Sleep(1500);
             }
             return null;

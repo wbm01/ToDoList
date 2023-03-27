@@ -49,5 +49,23 @@ namespace ToDoList
         {
             return id + ";" + Description + ";" + Category + ";" + Created + ";" + DueDate + ";" + Owner.Name;
         }
+
+        public string EditDescription(string description)
+        {
+            this.Description = description;
+            return description;
+        }
+
+        public DateTime EditDueDate(DateTime dueDate)
+        {
+            this.DueDate = dueDate;
+            return dueDate;
+        }
+
+        public string EditCategory(string category)
+        {
+            this.Category = category;
+            return category;
+        }
     }
 }
