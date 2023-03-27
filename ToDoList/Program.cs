@@ -6,32 +6,6 @@ using static System.Reflection.Metadata.BlobBuilder;
 
 internal class Program
 {
-    //static int Menu()
-    //{
-    //    int menu;
-
-    //    Console.Clear();
-    //    Console.WriteLine(">>>> Menu Principal <<<<");
-    //    Console.WriteLine("1- Adicionar tarefa ");
-    //    Console.WriteLine("2- Adicionar pessoa");
-    //    Console.WriteLine("3- Total das Tarefas Importantes");
-    //    Console.WriteLine("4- Total das Tarefas Pessoais");
-    //    Console.WriteLine("5- Total das Tarefas Profissionais");
-
-    //    Console.WriteLine("?- Sair da execução");
-
-    //    try
-    //    {
-    //        menu = int.Parse(Console.ReadLine());
-    //    }
-
-    //    catch
-    //    {
-    //        return '\n';
-    //    }
-
-    //    return menu;
-    //}
     private static void Main(string[] args)
     {
 
@@ -56,7 +30,7 @@ internal class Program
         }
         else
         {
-            Console.Write("1- Entrar com usuário existente\n2-Criar novo usuário \n\nSelecione a opção desejada: ");
+            Console.Write("1- Entrar com usuário existente\n2- Criar novo usuário \n\nSelecione a opção desejada: ");
             int user = int.Parse(Console.ReadLine());
 
             if (user == 1)
@@ -85,7 +59,7 @@ internal class Program
                 CriarArquivoTarefa(listatarefa, arquivopessoa);
             }
 
-        
+
 
         }
         int Menu()
@@ -93,11 +67,12 @@ internal class Program
             int menu;
 
             Console.Clear();
-            Console.WriteLine(">>>> Menu Principal <<<<");
+            Console.WriteLine(">>>> Menu Principal <<<<\n");
             Console.WriteLine("1- Adicionar tarefa");
-            Console.WriteLine("2 - Todas as tarefas");
-            Console.WriteLine("3 - Tarefas a concluir");
-            Console.WriteLine("4- Gravar programa e sair da execução");
+            Console.WriteLine("2- Todas as tarefas");
+            Console.WriteLine("3- Tarefas a concluir");
+            Console.WriteLine("4- Remover tarefa");
+            Console.WriteLine("5- Gravar e Sair da execução...");
 
             try
             {
@@ -118,12 +93,12 @@ internal class Program
 
             switch (op)
             {
-                case 1:
+                case 1:  // add tarefa
                     listatarefa.Add(CriarTarefa(pessoaAtual));
                     break;
 
-                case 2:
-                    foreach(var tarefa in listatarefa)
+                case 2: //todas as tarefas
+                    foreach (var tarefa in listatarefa)
                     {
                         Console.WriteLine(tarefa.ToString());
                     }
@@ -131,16 +106,16 @@ internal class Program
                     Console.ReadKey();
                     break;
 
-                case 3:
+                case 3:// tarefas a concluir
                     foreach (var tarefa in listatarefa)
                     {
-                        if(tarefa.Status == false)
+                        if (tarefa.Status == false)
                         {
                             Console.WriteLine(tarefa.ToString());
                             Console.WriteLine("Deseja finalizar essa tarefa? S - Sim | N - Não ");
                             char check = char.Parse(Console.ReadLine().ToUpper());
 
-                            if(check == 'S')
+                            if (check == 'S')
                             {
                                 tarefa.Status = true;
                             }
@@ -148,18 +123,22 @@ internal class Program
                     }
                     break;
 
-                case 4:
+                case 4: //remover tarefa
+                    listatarefa.Remove(DeleteTask());
+                    break;
+
+                case 5: // sair
                     CriarArquivoTarefa(listatarefa, arquivotarefa);
                     Console.WriteLine("Até mais :)");
                     Thread.Sleep(1500);
                     break;
 
-               
+
                 default:
                     Console.WriteLine("Digite um item válido do menu.");
                     break;
             }
-        } while (op != 4);
+        } while (op != 5);
 
 
 
@@ -178,37 +157,49 @@ internal class Program
 
         ToDo CriarTarefa(Person person)
         {
-            Console.Write(" Descrição da tarefa: ");
-            string description = Console.ReadLine();
+            try
+            {
+                Console.Write(" Descrição da tarefa: ");
+                string description = Console.ReadLine();
 
-            string categoria = SetCategory();
+                string categoria = SetCategory();
 
-            ToDo todo = new ToDo(description, categoria, person);
+                ToDo todo = new ToDo(description, categoria, person);
 
-            DateTime date = DateTime.Now;
-            string formattedDate = date.ToString("dd/MM/yyyy HH:mm:ss");
-            Console.WriteLine(" Essa tarefa foi criada em: " + formattedDate);
-            todo.Created = date;
+                DateTime date = DateTime.Now;
+                string formattedDate = date.ToString("dd/MM/yyyy HH:mm:ss");
+                Console.WriteLine(" Essa tarefa foi criada em: " + formattedDate);
+                todo.Created = date;
 
-            Console.WriteLine("Dia previsto de conclusão: ");
-            int dia = int.Parse(Console.ReadLine());
-            Console.WriteLine("Mês previsto de conclusão: ");
-            int mes = int.Parse(Console.ReadLine());
-            Console.WriteLine("Ano previsto de conclusão: ");
-            int ano = int.Parse(Console.ReadLine());
+                Console.WriteLine("Dia previsto de conclusão: ");
+                int dia = int.Parse(Console.ReadLine());
+                Console.WriteLine("Mês previsto de conclusão: ");
+                int mes = int.Parse(Console.ReadLine());
+                Console.WriteLine("Ano previsto de conclusão: ");
+                int ano = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Hora prevista de conclusão: ");
-            int hora = int.Parse(Console.ReadLine());
-            Console.WriteLine("Minuto previsto de conclusão: ");
-            int min = int.Parse(Console.ReadLine());
-            int seg = 0;
+                Console.WriteLine("Hora prevista de conclusão: ");
+                int hora = int.Parse(Console.ReadLine());
+                Console.WriteLine("Minuto previsto de conclusão: ");
+                int min = int.Parse(Console.ReadLine());
+                int seg = 0;
 
-            DateTime dueDate = new DateTime(ano, mes, dia, hora, min, seg);
-            todo.DueDate = dueDate;
+                DateTime dueDate = new DateTime(ano, mes, dia, hora, min, seg);
+                todo.DueDate = dueDate;
 
-
-
-            return todo;
+                return todo;
+            }
+            catch
+            {
+                Console.WriteLine("Erro. Não foi possível gravar a tarefa :( ");
+                Thread.Sleep(1500);
+            }
+            finally
+            {
+                Console.WriteLine("Tarefa concluída com sucesso! S2");
+                Thread.Sleep(1500);
+            }
+            return null;
         }
 
 
@@ -237,7 +228,7 @@ internal class Program
             }
         }
 
-        void CriarArquivoTarefa(List<ToDo>l,string s)
+        void CriarArquivoTarefa(List<ToDo> l, string s)
         {
             try
             {
@@ -338,7 +329,7 @@ internal class Program
                 StreamReader sr = new StreamReader(p);
 
                 string textToDo = "";
-                
+
 
                 while ((textToDo = sr.ReadLine()) != null)
                 {
@@ -346,12 +337,12 @@ internal class Program
                     var aux4 = textToDo.Split(";");
 
                     Person person = new Person(p);
-                   
+
                     string id = aux4[0];
                     string description = aux4[1];
                     string category = aux4[2];
 
-                    ToDo td = new ToDo(description,category,person);
+                    ToDo td = new ToDo(description, category, person);
 
                     var aux = td.Created.ToString();
                     aux = aux4[3];
@@ -398,13 +389,13 @@ internal class Program
 
                     var aux4 = textToDo.Split(";");
 
-                    
+
 
                     string id = aux4[0];
                     string name = aux4[1];
-                    
 
-                    listaperson.Add(new(id,name));
+
+                    listaperson.Add(new(id, name));
 
                 }
                 sr.Close();
@@ -422,7 +413,23 @@ internal class Program
 
         }
 
-
+        ToDo DeleteTask()
+        {
+            Console.Write("Digite FIELMENTE uma parte da descrição da tarefa a ser removida: ");
+            var n = Console.ReadLine();
+            foreach (var tarefa in listatarefa)
+            {
+                if (tarefa.Description.Contains(n))
+                {
+                    return tarefa;
+                }
+                else
+                {
+                    Console.WriteLine("Tarefa não encontrada.");
+                }
+            }
+            return null;
+        }
     }
 
 }
