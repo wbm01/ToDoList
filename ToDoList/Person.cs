@@ -9,7 +9,7 @@ namespace ToDoList
 {
     internal class Person
     {
-        private string IdPerson;
+        public string IdPerson;
         public string Name { get; set; }
 
 
@@ -34,6 +34,11 @@ namespace ToDoList
             string name = Console.ReadLine();
             this.Name = name;
             return name;
+        }
+
+        public string GetName()
+        {
+            return this.Name;
         }
 
         public override string ToString()

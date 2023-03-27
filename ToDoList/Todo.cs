@@ -10,7 +10,7 @@ namespace ToDoList
 {
     internal class ToDo
     {
-        private string id;
+        public string id;
 
         public string Description { get; set; }
         public string Category { get; set; }
@@ -31,13 +31,13 @@ namespace ToDoList
             Category = categoria;
         }*/
 
-        public ToDo(string description, string categoria)
+        public ToDo(string description, string categoria, Person person)
         {
             var temp = Guid.NewGuid();
             id = temp.ToString();
             this.Description = description;
             this.Status = false;
-            this.Owner = new Person();
+            this.Owner = person;
             this.Created = new DateTime();
             this.DueDate = new DateTime();
             this.Category = categoria;
@@ -89,12 +89,12 @@ namespace ToDoList
         public override string ToString()
         {
             return "\nId: " + id + "\nDescription: " + Description + "\nCategory: " + Category + "\nData de criação: " + Created + "\nPrevisão de conclusão: " + DueDate
-                + "\nStatus: " + Status;
+                + "\nStatus: " + Status + "Nome do usuário: " + Owner.Name;
         }
 
-        string ToFile()
+        public string ToFile()
         { //ver sobre o retorno da categoria
-            return id + ";" + Description + ";" + Created + ";" + ";" + Created + ";" + Status;
+            return id + ";" + Description + ";" + Category + ";" + Created + ";" + DueDate + ";" + Owner.Name;
         }
 
         //bool SetStatus()
