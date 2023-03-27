@@ -21,21 +21,22 @@ namespace ToDoList
         public DateTime Created { get; set; }
         public DateTime DueDate { get; set; }
 
-        public ToDo(string description, bool status, string categoria)
+        /*public ToDo(string description, string categoria)
         {
             var temp = Guid.NewGuid();
             id = temp.ToString();
 
             Description = description;
-            Status = status;
+            Status = false;
             Category = categoria;
-        }
+        }*/
 
-        public ToDo(string id, string description, bool status, string categoria)
+        public ToDo(string description, string categoria)
         {
-            this.id = id;
+            var temp = Guid.NewGuid();
+            id = temp.ToString();
             this.Description = description;
-            this.Status = status;
+            this.Status = false;
             this.Owner = new Person();
             this.Created = new DateTime();
             this.DueDate = new DateTime();

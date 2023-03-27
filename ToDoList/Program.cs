@@ -36,15 +36,26 @@ internal class Program
     
 
         List<ToDo> listatarefa = new List<ToDo>();
+        List<Person> listaperson = new List<Person>();
 
-       
+        Person CriarPerson()
+        {
+            Console.WriteLine("Digite o nome do usuário: ");
+            string name = Console.ReadLine();
+
+            Person person = new Person(name);
+
+            return person;
+        }
+
+
 
         ToDo CriarTarefa()
         {
             Console.Write(" Descrição da tarefa: ");
             string description = Console.ReadLine();
 
-            Console.WriteLine("Essa tarefa está concluída? N- não  | S - sim");
+            /*Console.WriteLine("Essa tarefa está concluída? N- não  | S - sim");
             char answer = char.Parse(Console.ReadLine().ToUpper());
             bool status;
 
@@ -55,15 +66,14 @@ internal class Program
             else
             {
                 status = true;
-            }
+            }*/
 
             string categoria = SetCategory();
 
 
-            ToDo todo = new ToDo(description, status, categoria);
+            ToDo todo = new ToDo(description, categoria);
 
-            Console.WriteLine("Informe o nome do usuário: ");
-            todo.Owner.SetName(Console.ReadLine());
+            
 
             DateTime date = DateTime.Now;
             string formattedDate = date.ToString("dd/MM/yyyy HH:mm:ss");
@@ -89,7 +99,14 @@ internal class Program
             return todo;
         }
 
+        listaperson.Add(CriarPerson());
         listatarefa.Add(CriarTarefa());
+
+        
+        foreach(var item in listaperson)
+        {
+            Console.WriteLine(item.ToString());
+        }
 
         foreach(var item in listatarefa)
         {
