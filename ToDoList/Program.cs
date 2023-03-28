@@ -66,7 +66,7 @@ internal class Program
                     {
                         currentPerson = CreatePerson();
                         personList.Add(currentPerson);
-                        CreateTaskFile(taskList, personFile);
+                        CreatePersonFile(personList, personFile);
                         //escolha = false;
                         break;
                     }
@@ -180,7 +180,10 @@ internal class Program
                     {
                         Console.WriteLine(pessoa);
                     }
-                    personList.Remove(DeletePerson());
+                    Console.Write("\nDigite o nome do usuário a ser removido: ");
+                    var n = Console.ReadLine();
+
+                    personList.Remove(DeletePerson(n));
                     Console.WriteLine("\nPressione qualquer tecla para retornar ao menu.");
                     Console.ReadKey();
                     break;
@@ -246,11 +249,16 @@ internal class Program
                                 }
                             }
                             break;
+
+                        default:
+                            Console.WriteLine("Opção inválida!");
+                            break;
                     }
                     break;
 
                 case 8: // sair
                     CreateTaskFile(taskList, taskFile);
+                    CreatePersonFile(personList, personFile);
                     Console.WriteLine("Até mais! :)");
                     Thread.Sleep(1500);
                     break;
@@ -270,6 +278,7 @@ internal class Program
 
             Console.Clear();
             Console.WriteLine(">>>> Menu Principal <<<<\n");
+            Console.WriteLine("**ATENÇÃO: Salve o programa após uma mudança**\n");
             Console.WriteLine("1- Adicionar tarefa");
             Console.WriteLine("2- Todas as tarefas");
             Console.WriteLine("3- Tarefas a concluir");
@@ -587,12 +596,11 @@ internal class Program
             return null;
         }
 
-        Person DeletePerson()
+        Person DeletePerson(string n)
         {
             try
             {
-                Console.Write("\nDigite o nome do usuário a ser removido: ");
-                var n = Console.ReadLine();
+                
                 foreach (var pessoa in personList)
                 {
                     if (personList.Count == 1)
@@ -602,7 +610,7 @@ internal class Program
                     }
                     else
                     {
-                        if (pessoa.Name.Contains(n))
+                        if (pessoa.Name.Equals(n))
                         {
                             Console.WriteLine("\nUsuário deletado com sucesso! :)");
                             Thread.Sleep(1500);
