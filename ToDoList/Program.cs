@@ -59,14 +59,16 @@ internal class Program
                                 currentPerson = pessoa;
                             }
                         }
-                        escolha = false;
+                        //escolha = false;
+                        break;
                     }
                     else if (user == 2)
                     {
                         currentPerson = CreatePerson();
                         personList.Add(currentPerson);
                         CreateTaskFile(taskList, personFile);
-                        escolha = false;
+                        //escolha = false;
+                        break;
                     }
                     else
                     {
@@ -593,9 +595,19 @@ internal class Program
                 var n = Console.ReadLine();
                 foreach (var pessoa in personList)
                 {
-                    if (pessoa.Name.Contains(n))
+                    if (personList.Count == 1)
                     {
-                        return pessoa;
+                        Console.WriteLine("Impossível remover o único usuário!");
+                        break;
+                    }
+                    else
+                    {
+                        if (pessoa.Name.Contains(n))
+                        {
+                            Console.WriteLine("\nUsuário deletado com sucesso! :)");
+                            Thread.Sleep(1500);
+                            return pessoa;
+                        }
                     }
                 }
             }
@@ -603,11 +615,6 @@ internal class Program
             {
                 Console.WriteLine("\nUsuário não encontrada.");
 
-            }
-            finally
-            {
-                Console.WriteLine("\nUsuário deletado com sucesso! :)");
-                Thread.Sleep(1500);
             }
             return null;
         }
